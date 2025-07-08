@@ -126,10 +126,41 @@ class WeatherApp(QWidget):
     def display_weather(self, data):
         # in the data, we are looking for a key of 'main'
         # 'main' contains a dictionary with key value pairs
+        self.temperature_label.setStyleSheet("font-size: 75px;")
         temperature_k = data['main']['temp']
         temperature_f = (temperature_k * 9/5) - 459.67
-        
+        weather_id = data['weather'][0]['id']
+        weather_description = data['weather'][0]['description']
+
         self.temperature_label.setText(f"{temperature_f:.0f}°F")
+        self.emoji_label.setText(self.get_weather_emoji(weather_id))
+        self.description_label.setText(weather_description)
+
+    @staticmethod
+    # static methods belong to a class but don't require any specific instance data or methods
+    def get_weather_emoji(weather_id):
+        if 200 <= weather_id <= 232:
+            return '⛈️'
+        elif 300 <= weather_id <= 321:
+            return '⛅'
+        elif 500 <= weather_id <= 531:
+            return '🌧️'
+        elif 600 <= weather_id <= 632:
+            return '🌨️'
+        elif 701 <= weather_id <= 781:
+            return '🌫️'
+        elif weather_id == 762:
+            return '🌋'
+        elif weather_id == 771:
+            return '💨'
+        elif weather_id == 781:
+            return '🌪️'
+        elif weather_id == 800:
+            return '☀️'
+        elif 801 <= weather_id <= 804:
+            return '☁️'
+        else:
+            return ''
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
