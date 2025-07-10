@@ -1,7 +1,7 @@
 import sys
 import requests
 from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, 
-                             QLineEdit, QPushButton, QVBoxLayout)
+                             QLineEdit, QPushButton, QVBoxLayout, QRadioButton)
 from PyQt5.QtCore import Qt
 
 class WeatherApp(QWidget):
@@ -10,6 +10,7 @@ class WeatherApp(QWidget):
         self.city_label = QLabel("Enter city name: ", self)
         self.city_input = QLineEdit(self)
         self.get_weather_button = QPushButton("Get Weather", self)
+        self.temperature_unit_button = QRadioButton("Celsius", self)
         self.temperature_label = QLabel(self)
         self.emoji_label = QLabel(self)
         self.description_label = QLabel(self)
@@ -24,6 +25,7 @@ class WeatherApp(QWidget):
         vbox.addWidget(self.city_label)
         vbox.addWidget(self.city_input)
         vbox.addWidget(self.get_weather_button)
+        vbox.addWidget(self.temperature_unit_button)
         vbox.addWidget(self.temperature_label)
         vbox.addWidget(self.emoji_label)
         vbox.addWidget(self.description_label)
@@ -35,6 +37,7 @@ class WeatherApp(QWidget):
         self.city_label.setAlignment(Qt.AlignCenter)
         self.city_input.setAlignment(Qt.AlignCenter)
         self.temperature_label.setAlignment(Qt.AlignCenter)
+        # self.temperature_unit_button.setAlignment(Qt.AlignLeft)
         self.emoji_label.setAlignment(Qt.AlignCenter)
         self.description_label.setAlignment(Qt.AlignCenter)
         self.temp_feels_like_label.setAlignment(Qt.AlignCenter)
@@ -44,6 +47,7 @@ class WeatherApp(QWidget):
         self.city_input.setObjectName("city_input")
         self.get_weather_button.setObjectName("get_weather_button")
         self.temperature_label.setObjectName("temperature_label")
+        self.temperature_unit_button.setObjectName("temperature_unit_button")
         self.emoji_label.setObjectName("emoji_label")
         self.description_label.setObjectName("description_label")
         self.temp_feels_like_label.setObjectName("temp_feel_like_label")
@@ -64,6 +68,9 @@ class WeatherApp(QWidget):
                 font-size: 30px;
                 font-weight: bold;
             }
+            QRadioButton#temperature_unit_button{
+                font-size:30px;
+            }
             QLabel#temperature_label{
                 font-size: 75px;
             }
@@ -82,9 +89,9 @@ class WeatherApp(QWidget):
             }
         """)
 
-        self.get_weather_button.clicked.connect(self.get_weather)
-
-    def get_weather(self):
+        self.get_weather_button.clicked.connect(lambda: self.get_weather("Fahrenheit"))
+        self.temperature_unit_button.clicked.connect(lambda: self.get_weather('Celsius'))
+    def get_weather(self, unit):
         # get the weather data
         api_key = "887a14cee881cdba2ea1ca4aabaa1d85"
         city = self.city_input.text()
@@ -97,7 +104,7 @@ class WeatherApp(QWidget):
 
             # if theres no error, use the data from get_weather and display it
             if data["cod"] == 200:
-                self.display_weather(data)
+                self.display_weather(unit, data)
                 
         except requests.exceptions.HTTPError as http_error:
         # HTTPError is an exception raised by the requests module 
@@ -143,26 +150,36 @@ class WeatherApp(QWidget):
         self.temp_feels_like_label.clear()
         self.temp_min_max_label.clear()
 
-    def display_weather(self, data):
+    def display_weather(self, unit, data):
         # in the data, we are looking for a key of 'main'
         # 'main' contains a dictionary with key value pairs
         self.temperature_label.setStyleSheet("font-size: 75px;")
         self.temp_feels_like_label.setStyleSheet("font-size: 50px;")
         self.temp_min_max_label.setStyleSheet("font-size: 50px;")
         self.emoji_label.setStyleSheet("font-size: 100px;")
-        temperature_f = ((data['main']['temp']) * 9/5) - 459.67
         # converting from kelvin to fahrenheit
-        temp_feels_like = ((data['main']['feels_like']) * 9/5) - 459.67
-        temp_min = ((data['main']['temp_min']) * 9/5) - 459.67
-        temp_max = ((data['main']['temp_max']) * 9/5) - 459.67
+        # toggling between F and C
+        if unit == "Fahrenheit":
+            temperature = ((data['main']['temp']) * 9/5) - 459.67
+            temp_feels_like = ((data['main']['feels_like']) * 9/5) - 459.67
+            temp_min = ((data['main']['temp_min']) * 9/5) - 459.67
+            temp_max = ((data['main']['temp_max']) * 9/5) - 459.67
+            unit_letter = "F"
+        else:
+            temperature = data['main']['temp'] - 273.15
+            temp_feels_like = data['main']['temp'] - 273.15
+            temp_min = data['main']['temp'] - 273.15
+            temp_max = data['main']['temp'] - 273.15
+            unit_letter = "C"
+
         weather_id = data['weather'][0]['id']
         weather_description = data['weather'][0]['description']
 
-        self.temperature_label.setText(f"{temperature_f:.0f}°F")
+        self.temperature_label.setText(f"{temperature:.0f}°{unit_letter}")
         self.emoji_label.setText(self.get_weather_emoji(weather_id))
         self.description_label.setText(weather_description)
-        self.temp_feels_like_label.setText(f"Feels like: {temp_feels_like:.0f}°F")
-        self.temp_min_max_label.setText(f"Min: {temp_min:.0f}°F     Max: {temp_max:.0f}°F")
+        self.temp_feels_like_label.setText(f"Feels like: {temp_feels_like:.0f}°{unit_letter}")
+        self.temp_min_max_label.setText(f"Min: {temp_min:.0f}°{unit_letter}     Max: {temp_max:.0f}°{unit_letter}")
 
     @staticmethod
     # static methods belong to a class but don't require any specific instance data or methods
