@@ -13,6 +13,8 @@ class WeatherApp(QWidget):
         self.temperature_label = QLabel(self)
         self.emoji_label = QLabel(self)
         self.description_label = QLabel(self)
+        self.temp_feels_like_label = QLabel(self)
+        self.temp_min_max_label = QLabel(self)
         self.initUI()
 
     def initUI(self):
@@ -25,6 +27,8 @@ class WeatherApp(QWidget):
         vbox.addWidget(self.temperature_label)
         vbox.addWidget(self.emoji_label)
         vbox.addWidget(self.description_label)
+        vbox.addWidget(self.temp_feels_like_label)
+        vbox.addWidget(self.temp_min_max_label)
 
         self.setLayout(vbox)
 
@@ -33,6 +37,8 @@ class WeatherApp(QWidget):
         self.temperature_label.setAlignment(Qt.AlignCenter)
         self.emoji_label.setAlignment(Qt.AlignCenter)
         self.description_label.setAlignment(Qt.AlignCenter)
+        self.temp_feels_like_label.setAlignment(Qt.AlignCenter)
+        self.temp_min_max_label.setAlignment(Qt.AlignCenter)
 
         self.city_label.setObjectName("city_label")
         self.city_input.setObjectName("city_input")
@@ -40,6 +46,8 @@ class WeatherApp(QWidget):
         self.temperature_label.setObjectName("temperature_label")
         self.emoji_label.setObjectName("emoji_label")
         self.description_label.setObjectName("description_label")
+        self.temp_feels_like_label.setObjectName("temp_feel_like_label")
+        self.temp_min_max_label.setObjectName("temp_min_max_label")
 
         self.setStyleSheet("""
             QLabel, QPushButton{
@@ -66,6 +74,12 @@ class WeatherApp(QWidget):
             QLabel#description_label{
                 font-size: 50px;
             }
+            QLabel#temp_feels_like_label{
+                font-size: 70px;
+            }
+            QLabel#temp_min_max_label{
+                font-size: 70px;
+            }
         """)
 
         self.get_weather_button.clicked.connect(self.get_weather)
@@ -84,6 +98,7 @@ class WeatherApp(QWidget):
             # if theres no error, use the data from get_weather and display it
             if data["cod"] == 200:
                 self.display_weather(data)
+                
         except requests.exceptions.HTTPError as http_error:
         # HTTPError is an exception raised by the requests module 
         # when an http request returns a status code of 400 or 500
@@ -122,19 +137,32 @@ class WeatherApp(QWidget):
     def display_error(self, message):
         self.temperature_label.setStyleSheet("font-size: 30px;")
         self.temperature_label.setText(message)
+        self.city_input.clear()
+        self.emoji_label.clear()
+        self.description_label.clear()
+        self.temp_feels_like_label.clear()
+        self.temp_min_max_label.clear()
 
     def display_weather(self, data):
         # in the data, we are looking for a key of 'main'
         # 'main' contains a dictionary with key value pairs
         self.temperature_label.setStyleSheet("font-size: 75px;")
-        temperature_k = data['main']['temp']
-        temperature_f = (temperature_k * 9/5) - 459.67
+        self.temp_feels_like_label.setStyleSheet("font-size: 50px;")
+        self.temp_min_max_label.setStyleSheet("font-size: 50px;")
+        self.emoji_label.setStyleSheet("font-size: 100px;")
+        temperature_f = ((data['main']['temp']) * 9/5) - 459.67
+        # converting from kelvin to fahrenheit
+        temp_feels_like = ((data['main']['feels_like']) * 9/5) - 459.67
+        temp_min = ((data['main']['temp_min']) * 9/5) - 459.67
+        temp_max = ((data['main']['temp_max']) * 9/5) - 459.67
         weather_id = data['weather'][0]['id']
         weather_description = data['weather'][0]['description']
 
         self.temperature_label.setText(f"{temperature_f:.0f}°F")
         self.emoji_label.setText(self.get_weather_emoji(weather_id))
         self.description_label.setText(weather_description)
+        self.temp_feels_like_label.setText(f"Feels like: {temp_feels_like:.0f}°F")
+        self.temp_min_max_label.setText(f"Min: {temp_min:.0f}°F     Max: {temp_max:.0f}°F")
 
     @staticmethod
     # static methods belong to a class but don't require any specific instance data or methods
@@ -142,7 +170,7 @@ class WeatherApp(QWidget):
         if 200 <= weather_id <= 232:
             return '⛈️'
         elif 300 <= weather_id <= 321:
-            return '⛅'
+            return '🌤️'
         elif 500 <= weather_id <= 531:
             return '🌧️'
         elif 600 <= weather_id <= 632:
@@ -158,7 +186,7 @@ class WeatherApp(QWidget):
         elif weather_id == 800:
             return '☀️'
         elif 801 <= weather_id <= 804:
-            return '☁️'
+            return '🌥️'
         else:
             return ''
 
