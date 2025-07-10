@@ -90,7 +90,7 @@ class WeatherApp(QWidget):
         """)
 
         self.get_weather_button.clicked.connect(lambda: self.get_weather("Fahrenheit"))
-        self.temperature_unit_button.clicked.connect(lambda: self.get_weather('Celsius'))
+        self.temperature_unit_button.clicked.connect(self.unit_changed)
     def get_weather(self, unit):
         # get the weather data
         api_key = "887a14cee881cdba2ea1ca4aabaa1d85"
@@ -206,6 +206,13 @@ class WeatherApp(QWidget):
             return '🌥️'
         else:
             return ''
+        
+    def unit_changed(self):
+        if self.temperature_unit_button.isChecked():
+            unit = "Celsius"
+        else:
+            unit = "Fahrenheit"
+        self.get_weather(unit)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
