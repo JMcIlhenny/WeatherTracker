@@ -39,6 +39,16 @@ A PyQt5 desktop app that fetches and displays real-time weather data using the O
 
 ---
 
+## API Key
+
+**Note:** The API key is currently hardcoded into the "main.py" for simplicity.
+
+To run the app yourself, open main.py and replace the placeholder with your actual API key from [OpenWeatherMap](https://openweathermap.org.api):
+'''python
+api_key = "your_api_key"
+
+---
+
 ### Installation
 
 ```bash
