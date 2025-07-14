@@ -1,2 +1,56 @@
-# WeatherTracker
-A weather tracking app with visual display
+# Weather Tracker ☀️🌧️❄️
+
+A PyQt5 desktop app that fetches and displays real-time weather data using the OpenWeatherMap API.
+
+---
+
+## Images
+
+<img width="392" height="227" alt="InitialHomeScreen" src="https://github.com/user-attachments/assets/2bb3d2f2-532f-44e0-9ff5-38676f55cee8" />
+<img width="465" height="672" alt="WeatherDisplay" src="https://github.com/user-attachments/assets/b58a220f-b839-46c0-8c3b-c47ee1b10e22" />
+
+---
+
+## Features
+
+- Search by city name
+- Displays:
+  - Current temperature
+  - "Feels like" temperature
+  - Min & Max temperature
+  - Weather description
+  - Weather emoji based on condition
+- Toggle between **Fahrenheit** and **Celsius**
+- Real-time weather data from OpenWeatherMap API
+- Basic error handling
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.x installed
+- [OpenWeatherMap API key](https://home.openweathermap.org/users/sign_up)
+- A virtual environment with PyQt5 installed
+
+---
+
+### Installation
+
+```bash
+# Clone the repo
+git clone https://github.com/YOUR-USERNAME/WeatherTracker.git
+cd WeatherTracker
+
+# Create and activate virtual environment
+python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+
+# macOS/Linux
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
