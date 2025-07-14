@@ -5,9 +5,10 @@ A PyQt5 desktop app that fetches and displays real-time weather data using the O
 ---
 
 ## Images
-
-<img width="392" height="227" alt="InitialHomeScreen" src="https://github.com/user-attachments/assets/2bb3d2f2-532f-44e0-9ff5-38676f55cee8" />
-<img width="465" height="672" alt="WeatherDisplay" src="https://github.com/user-attachments/assets/b58a220f-b839-46c0-8c3b-c47ee1b10e22" />
+<p align="center">
+  <img width="392" height="227" alt="InitialHomeScreen" src="https://github.com/user-attachments/assets/2bb3d2f2-532f-44e0-9ff5-38676f55cee8" />
+  <img width="465" height="672" alt="WeatherDisplay" src="https://github.com/user-attachments/assets/b58a220f-b839-46c0-8c3b-c47ee1b10e22" />
+</p>
 
 ---
 
@@ -51,6 +52,3 @@ python -m venv .venv
 
 # macOS/Linux
 source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
