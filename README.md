@@ -5,6 +5,7 @@ A PyQt5 desktop app that fetches and displays real-time weather data using the O
 ---
 
 ## Images
+
 <p align="center">
   <img width="392" height="227" alt="InitialHomeScreen" src="https://github.com/user-attachments/assets/2bb3d2f2-532f-44e0-9ff5-38676f55cee8" />
 </p>
@@ -44,16 +45,17 @@ A PyQt5 desktop app that fetches and displays real-time weather data using the O
 **Note:** The API key is currently hardcoded into the "main.py" for simplicity.
 
 To run the app yourself, open main.py and replace the placeholder with your actual API key from [OpenWeatherMap](https://openweathermap.org.api):
-'''python
-api_key = "your_api_key"
 
+```python
+api_key = "your_api_key"
+```
 ---
 
 ### Installation
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR-USERNAME/WeatherTracker.git
+git clone https://github.com/your_username/WeatherTracker.git
 cd WeatherTracker
 
 # Create and activate virtual environment
